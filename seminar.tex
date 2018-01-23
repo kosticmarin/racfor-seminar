@@ -13,12 +13,12 @@
 \tableofcontents
 
 \chapter{Introduction}
-Nmap ("Network Mapper") is a free and open source utility for network discovery and security auditing. Many systems and network administrators also find it useful for tasks such as network inventory, managing service upgrade schedules, and monitoring host and service uptime. In this seminar I will talk about how Gordon Lyon (also known by his pseudonym Fyodor Vaskovich) has taken Nmap to a whole new level by scanning millions of Internet hosts as part of the Worldscan project. Fyodor has presented his work on DEFCON 16 conference where he talked about how he used Nmap to determine possible bugs and flaws so he could further improve upon it and also he demonstrated practical advices on how to efficiently use Nmap. In the following pages I will show examples on how to use Nmap for host discovery and port scanning as the main topic, but I will also include additional topics about detecting and subverting firewall and intrusion detection systems.
+Nmap ("Network Mapper") is a free and open source utility for network discovery and security auditing. Many systems and network administrators also find it useful for tasks such as network inventory, managing service upgrade schedules, and monitoring host and service uptime. In this seminar I will talk about how Gordon Lyon (also known by his pseudonym Fyodor Vaskovich) has taken Nmap to a whole new level by scanning millions of Internet hosts as part of the Worldscan project. Also i will give an basic overview of Nmap and its most basic features. In the following pages I will show how to use Nmap for host discovery and port scanning as the main topic. Additional topics included in the paper are about detecting and subverting firewall, intrusion detection systems, and techniques for OS detection.
 
 \chapter{Scanning the Internet}
 
 \section{Scan Challenges}
-Before making an scan of such scale, first question that comes to mind is what are the actual IP addresses that you want to scan. There are couple of options that one can use to determine IP addresses to scan, one could take BGP routing tables. BGP stands for Border Gateway Protocol, it is a standardized exterior gateway protocol designed to exchange routing and reachability information among autonomous systems on the Internet. Another interesting option is using DNS zone files, these are text files that describe a DNS zone. A DNS zone is a subset, often a single domain, of a hierarchical domain name structure of the DNS. The zone file contains mapping between domain names and IP addresses and other resources. But what in his talk Fyodor used Nmap's own random IP generator and demonstrated how one can use this Nmap tool to get a list of IP addresses without actually scanning the machines.
+Before making an scan of such scale, first question that comes to mind is what are the actual IP addresses that you want to scan. There are couple of options that one can use to determine IP addresses to scan, one could take BGP routing tables. BGP stands for Border Gateway Protocol, it is a standardized exterior gateway protocol designed to exchange routing and reachability information among autonomous systems on the Internet. Another interesting option is using DNS zone files, these are text files that describe a DNS zone. A DNS zone is a subset, often a single domain, of a hierarchical domain name structure of the DNS. The zone file contains mapping between domain names and IP addresses and other resources. But a much simpler option is one described by Fyodor in his DEFCON 16 talk about how he scanned the Internet using Nmap. Fyodor used Nmap's own random IP generator and demonstrated how one can use this Nmap tool to get a list of IP addresses without actually scanning the machines.
 \begin{lstlisting}[language=bash, caption= Using Nmap to generate random IP addresses]
 	nmap -iR 25200000 -sL -n | grep "not scanned" 
 	| awk '{print $2}' | sort -n |
@@ -40,7 +40,7 @@ In the previous section we described how to use Nmap to random generate a list o
 	\item SYN packet discovery ( -PS) best against \underline{stateful} firewall. The SYN flag suggests to the remote system that you are attempting to establish a connection. Normally the destination port will be closed, and a RST (reset) packet sent back. If the port happens to be open, the target will take the second step of a TCP three-way-handshake by responding with a SYN/ACK TCP packet.
 	\item ACK packet discovery ( -PA) best against \underline{stateless} firewall. The TCP ACK ping is quite similar to the just-discussed SYN ping. The difference, as you could likely guess, is that the TCP ACK flag is set instead of the SYN flag. Such an ACK packet purports to be acknowledging data over an established TCP connection, but no such connection exists. So remote hosts should always respond with a RST packet, disclosing their existence in the process.
 \end{itemize}
-As described above we see that different TCP port scanning methods have different scanning results so a best practice would be to use both methods. Now what one could be wondering is what are the actual ports that are good to scan with these methods. It would be futile to scan all ports since we know that there are 65 thousand available ports, and such a scan would just be too long to perform on a big number of hosts. What Fyodor suggests in his talk is the fallowing list of ports, what is important to note is that this information was a result of scans that he did on hosts that were heavily firewalled.
+As described above we see that different TCP port scanning methods have different scanning results so a best practice would be to use both methods. Now what one could be wondering is what are the actual ports that are good to scan with these methods. It would be futile to scan all ports since we know that there are 65 thousand available ports, and such a scan would just be too long to perform on a big number of hosts. What Fyodor suggests in his talk is the fallowing list of ports, this information was a result of scans that he did on hosts that were heavily firewalled.
 \newline Top TCP Host Discovery Ports:
 \begin{itemize}
 	\item 80/http
@@ -96,12 +96,9 @@ Network obstructions such as firewalls can make mapping a network exceedingly di
 \end{description}
 
 \chapter{Conclusion}
-
+Nmap is a powerful tool and at the hands of an expert user of Nmap its much more than that. This seminar is designed to give you an overview of its core features and options. For you to become an expert you need experience and working with other users of Nmap to teach you and show you much more. But as a starting point official documentation of Nmap can be found on the Internet, an official book has been published by Fyodor as an in-depth guide for Nmap users. For any future system administrators, penetration testers or computer forensics analyst Nmap is a must have tool for both reconnaissance and supervision of remote hosts. 
 
 \bibliography{literatura}
 \bibliographystyle{fer}
-
-\chapter{Abstract}
-%TODO.
 
 \end{document}
